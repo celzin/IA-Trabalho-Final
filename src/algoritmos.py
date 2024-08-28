@@ -3,10 +3,20 @@
 import heapq
 from collections import deque
 
-def heuristica(no_atual, no_destino):
-    # Exemplo de heurística simplificada (número de letras de diferença)
-    return abs(ord(no_destino) - ord(no_atual))
+# Dicionário com as heurísticas (aproximadas) para cada cidade em relação a Bucareste
+heuristica_distancias = {
+    'Arad': 366, 'Zerind': 374, 'Oradea': 380, 'Sibiu': 253,
+    'Fagaras': 176, 'Rimnicu Vilcea': 193, 'Pitesti': 100,
+    'Timisoara': 329, 'Lugoj': 244, 'Mehadia': 241, 'Drobeta': 242,
+    'Craiova': 160, 'Bucareste': 0, 'Giurgiu': 77, 'Urziceni': 80,
+    'Hirsova': 151, 'Eforie': 161, 'Vaslui': 199, 'Iasi': 226, 'Neamt': 234
+}
 
+def heuristica(no_atual, no_destino='Bucareste'):
+    # Usando a heurística aproximada para Bucareste
+    return heuristica_distancias.get(no_atual, 0)
+
+# Função A* permanece a mesma
 def a_estrela(grafo, inicio, fim):
     fila_prioridade = []
     heapq.heappush(fila_prioridade, (0, inicio))

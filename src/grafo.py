@@ -11,23 +11,43 @@ class Grafo:
         self.nos[origem][destino] = custo
         self.nos[destino][origem] = custo  # Para grafos não direcionados
 
-def criar_grafo_exemplo():
+def criar_grafo_romenia():
     grafo = Grafo()
 
-    # Adicionar nós
-    grafo.adicionar_no('A')
-    grafo.adicionar_no('B')
-    grafo.adicionar_no('C')
-    grafo.adicionar_no('D')
-    grafo.adicionar_no('E')
-
-    # Adicionar arestas com custos
-    grafo.adicionar_aresta('A', 'B', 4)
-    grafo.adicionar_aresta('A', 'C', 2)
-    grafo.adicionar_aresta('B', 'C', 5)
-    grafo.adicionar_aresta('B', 'D', 10)
-    grafo.adicionar_aresta('C', 'D', 3)
-    grafo.adicionar_aresta('D', 'E', 4)
-    grafo.adicionar_aresta('C', 'E', 7)
+    # Adicionando nós conforme o mapa da Romênia
+    cidades = [
+        'Arad', 'Zerind', 'Oradea', 'Sibiu', 'Fagaras', 'Rimnicu Vilcea',
+        'Pitesti', 'Timisoara', 'Lugoj', 'Mehadia', 'Drobeta', 'Craiova',
+        'Bucareste', 'Giurgiu', 'Urziceni', 'Hirsova', 'Eforie', 'Vaslui',
+        'Iasi', 'Neamt'
+    ]
+    
+    for cidade in cidades:
+        grafo.adicionar_no(cidade)
+    
+    # Adicionando arestas com base nas distâncias fornecidas
+    grafo.adicionar_aresta('Arad', 'Zerind', 75)
+    grafo.adicionar_aresta('Arad', 'Timisoara', 118)
+    grafo.adicionar_aresta('Arad', 'Sibiu', 140)
+    grafo.adicionar_aresta('Zerind', 'Oradea', 71)
+    grafo.adicionar_aresta('Oradea', 'Sibiu', 151)
+    grafo.adicionar_aresta('Timisoara', 'Lugoj', 111)
+    grafo.adicionar_aresta('Lugoj', 'Mehadia', 70)
+    grafo.adicionar_aresta('Mehadia', 'Drobeta', 75)
+    grafo.adicionar_aresta('Drobeta', 'Craiova', 120)
+    grafo.adicionar_aresta('Sibiu', 'Fagaras', 99)
+    grafo.adicionar_aresta('Sibiu', 'Rimnicu Vilcea', 80)
+    grafo.adicionar_aresta('Fagaras', 'Bucareste', 211)
+    grafo.adicionar_aresta('Rimnicu Vilcea', 'Pitesti', 97)
+    grafo.adicionar_aresta('Rimnicu Vilcea', 'Craiova', 146)
+    grafo.adicionar_aresta('Pitesti', 'Craiova', 138)
+    grafo.adicionar_aresta('Pitesti', 'Bucareste', 101)
+    grafo.adicionar_aresta('Bucareste', 'Giurgiu', 90)
+    grafo.adicionar_aresta('Bucareste', 'Urziceni', 85)
+    grafo.adicionar_aresta('Urziceni', 'Hirsova', 98)
+    grafo.adicionar_aresta('Hirsova', 'Eforie', 86)
+    grafo.adicionar_aresta('Urziceni', 'Vaslui', 142)
+    grafo.adicionar_aresta('Vaslui', 'Iasi', 92)
+    grafo.adicionar_aresta('Iasi', 'Neamt', 87)
 
     return grafo
