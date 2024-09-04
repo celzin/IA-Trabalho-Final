@@ -1,23 +1,29 @@
-# algoritmos.py
-
 import heapq
+import math
 from collections import deque
 
-# Dicionário com as heurísticas (aproximadas) para cada cidade em relação a Bucareste
-heuristica_distancias = {
-    'Arad': 366, 'Zerind': 374, 'Oradea': 380, 'Sibiu': 253,
-    'Fagaras': 176, 'Rimnicu Vilcea': 193, 'Pitesti': 100,
-    'Timisoara': 329, 'Lugoj': 244, 'Mehadia': 241, 'Drobeta': 242,
-    'Craiova': 160, 'Bucareste': 0, 'Giurgiu': 77, 'Urziceni': 80,
-    'Hirsova': 151, 'Eforie': 161, 'Vaslui': 199, 'Iasi': 226, 'Neamt': 234
-}
+# Heurísticas
 
-def heuristica(no_atual, no_destino='Bucareste'):
-    # Usando a heurística aproximada para Bucareste
-    return heuristica_distancias.get(no_atual, 0)
+def heuristica_euclidiana(cidade_atual, destino, coordenadas):
+    x1, y1 = coordenadas[cidade_atual]
+    x2, y2 = coordenadas[destino]
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-# Função A* permanece a mesma
-def a_estrela(grafo, inicio, fim):
+def heuristica_manhattan(cidade_atual, destino, coordenadas):
+    x1, y1 = coordenadas[cidade_atual]
+    x2, y2 = coordenadas[destino]
+    return abs(x2 - x1) + abs(y2 - y1)
+
+def heuristica_mais_proxima(cidade_atual, cidades_nao_visitadas, grafo):
+    menor_distancia = float('inf')
+    for cidade in cidades_nao_visitadas:
+        distancia = grafo[cidade_atual].get(cidade, float('inf'))
+        if distancia < menor_distancia:
+            menor_distancia = distancia
+    return menor_distancia
+
+# A* Algorithm
+def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
     fila_prioridade = []
     heapq.heappush(fila_prioridade, (0, inicio))
     custos = {inicio: 0}
@@ -25,62 +31,59 @@ def a_estrela(grafo, inicio, fim):
     
     while fila_prioridade:
         custo_atual, no_atual = heapq.heappop(fila_prioridade)
-        
-        if no_atual == fim:
+
+        if no_atual == destino:
             caminho = []
             while no_atual:
                 caminho.append(no_atual)
                 no_atual = caminhos[no_atual]
-            return caminho[::-1]
-        
-        for vizinho, custo in grafo.nos[no_atual].items():
-            novo_custo = custos[no_atual] + custo
+            return caminho[::-1], custo_atual
+
+        for vizinho, distancia in grafo[no_atual].items():
+            novo_custo = custos[no_atual] + distancia
             if vizinho not in custos or novo_custo < custos[vizinho]:
                 custos[vizinho] = novo_custo
-                prioridade = novo_custo + heuristica(vizinho, fim)
+                prioridade = novo_custo + heuristica(vizinho, destino, coordenadas)
                 heapq.heappush(fila_prioridade, (prioridade, vizinho))
                 caminhos[vizinho] = no_atual
-    
-    return None
+                
+    return None, float('inf')
 
-def bfs(grafo, inicio, fim):
-    fila = deque([inicio])
-    caminhos = {inicio: None}
-    
+# BFS Algorithm
+def bfs(grafo, inicio, destino):
+    fila = deque([[inicio]])
+    visitados = set()
+
     while fila:
-        no_atual = fila.popleft()
-        
-        if no_atual == fim:
-            caminho = []
-            while no_atual:
-                caminho.append(no_atual)
-                no_atual = caminhos[no_atual]
-            return caminho[::-1]
-        
-        for vizinho in grafo.nos[no_atual]:
-            if vizinho not in caminhos:
-                caminhos[vizinho] = no_atual
-                fila.append(vizinho)
-    
+        caminho = fila.popleft()
+        no_atual = caminho[-1]
+
+        if no_atual == destino:
+            return caminho
+
+        if no_atual not in visitados:
+            visitados.add(no_atual)
+            for vizinho in grafo[no_atual]:
+                novo_caminho = list(caminho)
+                novo_caminho.append(vizinho)
+                fila.append(novo_caminho)
+
     return None
 
-def dfs(grafo, inicio, fim, caminho=None, visitados=None):
-    if caminho is None:
-        caminho = []
+# DFS Algorithm
+def dfs(grafo, inicio, destino, visitados=None):
     if visitados is None:
         visitados = set()
-    
-    caminho.append(inicio)
+
     visitados.add(inicio)
-    
-    if inicio == fim:
-        return caminho
-    
-    for vizinho in grafo.nos[inicio]:
+
+    if inicio == destino:
+        return [inicio]
+
+    for vizinho in grafo[inicio]:
         if vizinho not in visitados:
-            resultado = dfs(grafo, vizinho, fim, caminho, visitados)
-            if resultado:
-                return resultado
-    
-    caminho.pop()
+            caminho = dfs(grafo, vizinho, destino, visitados)
+            if caminho:
+                return [inicio] + caminho
+
     return None
