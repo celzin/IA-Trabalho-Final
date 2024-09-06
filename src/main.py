@@ -1,5 +1,5 @@
 from grafo import criar_grafo_romenia
-from algoritmos import a_estrela, bfs, dfs, heuristica_euclidiana, heuristica_manhattan
+from algoritmos import *
 from visualizacao import visualizar_grafo
 
 def main():
@@ -26,7 +26,6 @@ def main():
         'Neamt': (46.98, 26.38)
     }
 
-    # Executar A* com diferentes heurísticas
     print("A* com heurística Euclidiana:")
     caminho, distancia = a_estrela(grafo.nos, 'Arad', 'Bucharest', heuristica_euclidiana, coordenadas)
     print(f"Caminho: {caminho}, Distância: {distancia}")
@@ -37,13 +36,11 @@ def main():
     print(f"Caminho: {caminho}, Distância: {distancia}")
     visualizar_grafo(grafo.nos, caminho)
 
-    # Executar BFS
     print("\nBusca em Largura (BFS):")
     caminho = bfs(grafo.nos, 'Arad', 'Bucharest')
     print(f"Caminho: {caminho}")
     visualizar_grafo(grafo.nos, caminho)
 
-    # Executar DFS
     print("\nBusca em Profundidade (DFS):")
     caminho = dfs(grafo.nos, 'Arad', 'Bucharest')
     print(f"Caminho: {caminho}")
