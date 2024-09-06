@@ -26,25 +26,25 @@ def main():
         'Neamt': (46.98, 26.38)
     }
 
-    print("A* com heurística Euclidiana:")
-    caminho, distancia = a_estrela(grafo.nos, 'Arad', 'Bucharest', heuristica_euclidiana, coordenadas)
+    # print("A* com heurística Euclidiana:")
+    # caminho, distancia = a_estrela(grafo.nos, 'Arad', 'Bucharest', heuristica_euclidiana, coordenadas)
+    # print(f"Caminho: {caminho}, Distância: {distancia}")
+    # visualizar_grafo(grafo.nos, caminho)
+
+    print("\nA* com heurística Literatura:")
+    caminho, distancia = a_estrela(grafo.nos, 'Arad', 'Bucharest', heuristica_literatura, coordenadas)
     print(f"Caminho: {caminho}, Distância: {distancia}")
     visualizar_grafo(grafo.nos, caminho)
 
-    print("\nA* com heurística Manhattan:")
-    caminho, distancia = a_estrela(grafo.nos, 'Arad', 'Bucharest', heuristica_manhattan, coordenadas)
-    print(f"Caminho: {caminho}, Distância: {distancia}")
-    visualizar_grafo(grafo.nos, caminho)
+    # print("\nBusca em Largura (BFS):")
+    # caminho = bfs(grafo.nos, 'Arad', 'Bucharest')
+    # print(f"Caminho: {caminho}")
+    # visualizar_grafo(grafo.nos, caminho)
 
-    print("\nBusca em Largura (BFS):")
-    caminho = bfs(grafo.nos, 'Arad', 'Bucharest')
-    print(f"Caminho: {caminho}")
-    visualizar_grafo(grafo.nos, caminho)
-
-    print("\nBusca em Profundidade (DFS):")
-    caminho = dfs(grafo.nos, 'Arad', 'Bucharest')
-    print(f"Caminho: {caminho}")
-    visualizar_grafo(grafo.nos, caminho)
+    # print("\nBusca em Profundidade (DFS):")
+    # caminho = dfs(grafo.nos, 'Arad', 'Bucharest')
+    # print(f"Caminho: {caminho}")
+    # visualizar_grafo(grafo.nos, caminho)
 
 if __name__ == "__main__":
     main()
