@@ -35,3 +35,37 @@ Descrição:
     4. Visualização dos Resultados: Criar visualizações que mostrem o processo de busca e a solução final encontrada. Isso pode incluir animações que mostram o progresso do algoritmo em encontrar a solução.
     Entrega: Código-fonte, documentação explicando a implementação do algoritmo A* e as heurísticas utilizadas, um relatório detalhado com a comparação entre os diferentes algoritmos e uma análise dos resultados.
     Tecnologias sugeridas: Python (com bibliotecas como NetworkX para grafos), Java, C++.
+
+    Entendido, vou proceder com a análise dos arquivos enviados e sugerir possíveis melhorias com base no que foi implementado até agora. 
+
+
+### Sugestões Gerais:
+
+1. **Melhoria nas Heurísticas:**
+   - Além da Euclidiana e Manhattan, uma boa sugestão seria adicionar a heurística baseada nas distâncias em linha reta (hDLR), conforme já discutido. Isso pode ser especialmente relevante para melhorar a eficácia do A* com um dado mais realista (mesmo que estimado).
+
+2. **Comparação de Algoritmos:**
+   - Atualmente, o código executa e mostra o caminho encontrado pelos diferentes algoritmos. Uma melhoria interessante seria fazer uma comparação direta entre eles em termos de:
+     - Tempo de execução
+     - Número de nós explorados
+   - Isso pode ser medido com o uso da biblioteca `time` para medir o tempo e uma contagem dos nós visitados dentro de cada algoritmo.
+
+3. **Visualização:**
+   - A visualização atual mostra o grafo e o caminho final. Algumas sugestões para melhorar isso incluem:
+     - Mostrar a sequência de exploração dos nós ao longo do tempo.
+     - Destaque visual dos nós visitados (talvez com cores que mudam conforme o algoritmo visita cada nó).
+     - Incluir a capacidade de salvar a visualização em um arquivo de imagem, útil para relatórios.
+
+4. **Manutenção da Consistência nos Algoritmos:**
+   - Verifique se todos os algoritmos estão utilizando estruturas de dados eficientes. Por exemplo, no A*, o uso da fila de prioridade (`heapq`) já é eficiente. Para o DFS e BFS, certifique-se de que a estrutura de fila (deque) esteja sendo usada corretamente para garantir a eficiência máxima.
+
+5. **Relatório Automático:**
+   - Adicionar uma funcionalidade para gerar um relatório comparativo entre os diferentes algoritmos automaticamente, incluindo:
+     - Caminho encontrado
+     - Distância total
+     - Tempo de execução
+     - Número de nós explorados
+   - Isso pode ser gerado em um arquivo `.txt` ou `.csv` para ser utilizado na análise final do trabalho.
+
+6. **Modularidade:**
+   - A implementação está bem modularizada, mas uma sugestão é dividir as funções em arquivos menores caso o projeto aumente de tamanho. Por exemplo, as heurísticas podem ser separadas em um arquivo próprio se houver várias opções.
