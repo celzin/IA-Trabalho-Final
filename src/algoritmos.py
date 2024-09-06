@@ -49,23 +49,27 @@ def heuristica_manhattan(cidade_atual, destino, coordenadas):
     x2, y2 = coordenadas[destino]
     return abs(x2 - x1) + abs(y2 - y1)
 
-def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
+def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
     fila_prioridade = []
     heapq.heappush(fila_prioridade, (0, inicio))
     custos = {inicio: 0}
     caminhos = {inicio: None}
     nos_explorados = 0  # Contador de nós explorados
     
+    if log is None:
+        log = []  # Inicializa o log caso não seja passado
+    
     while fila_prioridade:
         custo_atual, no_atual = heapq.heappop(fila_prioridade)
         nos_explorados += 1  # Incrementa quando um nó é explorado
+        log.append(f"Nó explorado: {no_atual}, Custo acumulado: {custo_atual}")
 
         if no_atual == destino:
             caminho = []
             while no_atual:
                 caminho.append(no_atual)
                 no_atual = caminhos[no_atual]
-            return caminho[::-1], custo_atual, nos_explorados  # Retorna também o número de nós
+            return caminho[::-1], custo_atual, nos_explorados, log  # Retorna também o log
 
         for vizinho, distancia in grafo[no_atual].items():
             novo_custo = custos[no_atual] + distancia
@@ -75,20 +79,24 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
                 heapq.heappush(fila_prioridade, (prioridade, vizinho))
                 caminhos[vizinho] = no_atual
                 
-    return None, float('inf'), nos_explorados
+    return None, float('inf'), nos_explorados, log
 
-def bfs(grafo, inicio, destino):
+def bfs(grafo, inicio, destino, log=None):
     fila = deque([[inicio]])
     visitados = set()
     nos_explorados = 0  # Contador de nós explorados
 
+    if log is None:
+        log = []  # Inicializa o log caso não seja passado
+    
     while fila:
         caminho = fila.popleft()
         no_atual = caminho[-1]
         nos_explorados += 1  # Incrementa quando um nó é explorado
+        log.append(f"Nó explorado: {no_atual}")
 
         if no_atual == destino:
-            return caminho, nos_explorados  # Retorna o número de nós
+            return caminho, nos_explorados, log  # Retorna também o log
 
         if no_atual not in visitados:
             visitados.add(no_atual)
@@ -97,22 +105,26 @@ def bfs(grafo, inicio, destino):
                 novo_caminho.append(vizinho)
                 fila.append(novo_caminho)
 
-    return None, nos_explorados
+    return None, nos_explorados, log
 
-def dfs(grafo, inicio, destino, visitados=None, nos_explorados=0):
+def dfs(grafo, inicio, destino, visitados=None, nos_explorados=0, log=None):
     if visitados is None:
         visitados = set()
 
+    if log is None:
+        log = []  # Inicializa o log caso não seja passado
+    
     visitados.add(inicio)
     nos_explorados += 1  # Incrementa quando um nó é explorado
+    log.append(f"Nó explorado: {inicio}")
 
     if inicio == destino:
-        return [inicio], nos_explorados  # Retorna o número de nós
+        return [inicio], nos_explorados, log  # Retorna o número de nós e o log
 
     for vizinho in grafo[inicio]:
         if vizinho not in visitados:
-            caminho, nos_explorados = dfs(grafo, vizinho, destino, visitados, nos_explorados)
+            caminho, nos_explorados, log = dfs(grafo, vizinho, destino, visitados, nos_explorados, log)
             if caminho:
-                return [inicio] + caminho, nos_explorados
+                return [inicio] + caminho, nos_explorados, log
 
-    return None, nos_explorados
+    return None, nos_explorados, log
