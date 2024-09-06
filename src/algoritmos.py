@@ -2,6 +2,37 @@ import heapq
 import math
 from collections import deque
 
+# Tabela de distâncias em linha reta para Bucareste (hDLR)
+hDLR = {
+    'Arad': 366, 'Zerind': 374, 'Oradea': 380, 'Timisoara': 329, 'Sibiu': 253,
+    'Fagaras': 176, 'Rimnicu Vilcea': 193, 'Pitesti': 100, 'Bucharest': 0,
+    'Giurgiu': 77, 'Urziceni': 80, 'Hirsova': 151, 'Eforie': 161, 'Vaslui': 199,
+    'Iasi': 226, 'Neamt': 234
+}
+
+coordenadas = {
+        'Arad': (46.18, 21.32),
+        'Zerind': (46.62, 21.51),
+        'Oradea': (47.07, 21.92),
+        'Timisoara': (45.76, 21.23),
+        'Sibiu': (45.79, 24.15),
+        'Fagaras': (45.84, 24.97),
+        'Rimnicu Vilcea': (45.10, 24.37),
+        'Pitesti': (44.85, 24.87),
+        'Bucharest': (44.43, 26.10),
+        'Giurgiu': (43.90, 25.97),
+        'Urziceni': (44.71, 26.64),
+        'Hirsova': (44.69, 27.95),
+        'Eforie': (44.07, 28.63),
+        'Vaslui': (46.63, 27.73),
+        'Iasi': (47.16, 27.58),
+        'Neamt': (46.98, 26.38)
+    }
+
+# Heurística baseada em hDLR
+def heuristica_hDLR(cidade_atual, destino, _=None):
+    return hDLR.get(cidade_atual, float('inf'))
+
 def heuristica_euclidiana(cidade_atual, destino, coordenadas):
     x1, y1 = coordenadas[cidade_atual]
     x2, y2 = coordenadas[destino]
