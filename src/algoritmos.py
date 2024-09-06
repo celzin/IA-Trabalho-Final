@@ -93,7 +93,7 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
 
 def bfs(grafo, inicio, destino, log=None):
     fila = deque([[inicio]])
-    visitados = set()
+    visitados = set([inicio])  # Marcar o nó inicial como visitado imediatamente
     nos_explorados = 0  # Contador de nós explorados
 
     if log is None:
@@ -110,9 +110,10 @@ def bfs(grafo, inicio, destino, log=None):
         if no_atual == destino:
             return caminho, nos_explorados, log  # Retorna também o log
 
-        if no_atual not in visitados:
-            visitados.add(no_atual)
-            for vizinho in grafo[no_atual]:
+        # Verificar vizinhos não visitados
+        for vizinho in grafo[no_atual]:
+            if vizinho not in visitados:
+                visitados.add(vizinho)  # Marca o vizinho como visitado ao adicioná-lo à fila
                 novo_caminho = list(caminho)
                 novo_caminho.append(vizinho)
                 fila.append(novo_caminho)
