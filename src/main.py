@@ -22,7 +22,7 @@ def main():
     # visualizar_grafo(grafo.nos, caminho)
 
     print("\nA* com heurística hDLR:")
-    (caminho, distancia, nos_explorados, log), tempo_execucao = medir_tempo_execucao(a_estrela, grafo.nos, 'Arad', 'Bucharest', heuristica_hDLR, coordenadas)
+    (caminho, distancia, nos_explorados, log), tempo_execucao = medir_tempo_execucao(a_estrela, grafo.nos, 'Arad', 'Bucharest', heuristica_hDLR)
     print(f"Caminho: {caminho}, Distância: {distancia}, Nós explorados: {nos_explorados}, Tempo de execução: {tempo_execucao:.4f} ms")
     print("Sequência de nós explorados:")
     for entry in log:

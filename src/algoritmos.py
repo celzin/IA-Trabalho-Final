@@ -62,7 +62,9 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
     while fila_prioridade:
         custo_atual, no_atual = heapq.heappop(fila_prioridade)
         nos_explorados += 1  # Incrementa quando um nó é explorado
-        log.append(f"Nó explorado: {no_atual}, Custo acumulado: {custo_atual}")
+
+        # Registrar a expansão do nó no log
+        log.append(f"Expansão do nó {no_atual}: f(g+h) = {custo_atual}")
 
         if no_atual == destino:
             caminho = []
@@ -71,13 +73,21 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
                 no_atual = caminhos[no_atual]
             return caminho[::-1], custo_atual, nos_explorados, log  # Retorna também o log
 
+        # Registrar os vizinhos e calcular os valores de f = g + h para cada um
+        log.append(f"  Vizinhos de {no_atual}:")
         for vizinho, distancia in grafo[no_atual].items():
             novo_custo = custos[no_atual] + distancia
+            heuristica_valor = heuristica(vizinho, destino, coordenadas)
+            f_valor = novo_custo + heuristica_valor
+
             if vizinho not in custos or novo_custo < custos[vizinho]:
                 custos[vizinho] = novo_custo
                 prioridade = novo_custo + heuristica(vizinho, destino, coordenadas)
                 heapq.heappush(fila_prioridade, (prioridade, vizinho))
                 caminhos[vizinho] = no_atual
+
+            # Registrar o cálculo de f(g+h) para o vizinho
+            log.append(f"    - {vizinho}: g = {novo_custo}, h = {heuristica_valor}, f = {f_valor}")
                 
     return None, float('inf'), nos_explorados, log
 
