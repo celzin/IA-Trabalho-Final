@@ -64,7 +64,7 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
         nos_explorados += 1  # Incrementa quando um nó é explorado
 
         # Registrar a expansão do nó no log
-        log.append(f"Expansão do nó {no_atual}: f(g+h) = {custo_atual}")
+        log.append(f"Expansão do nó {no_atual}: f(g+h) = {custo_atual:.2f}")
 
         if no_atual == destino:
             caminho = []
@@ -87,7 +87,7 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
                 caminhos[vizinho] = no_atual
 
             # Registrar o cálculo de f(g+h) para o vizinho
-            log.append(f"    - {vizinho}: g = {novo_custo}, h = {heuristica_valor}, f = {f_valor}")
+            log.append(f"    - {vizinho}: g = {novo_custo:.2f}, h = {heuristica_valor:.2f}, f = {f_valor:.2f}")
                 
     return None, float('inf'), nos_explorados, log
 
@@ -103,7 +103,9 @@ def bfs(grafo, inicio, destino, log=None):
         caminho = fila.popleft()
         no_atual = caminho[-1]
         nos_explorados += 1  # Incrementa quando um nó é explorado
-        log.append(f"Nó explorado: {no_atual}")
+
+        # Registrar o nó explorado no log
+        log.append(f"Nó explorado: {no_atual}, caminho até agora: {caminho}")
 
         if no_atual == destino:
             return caminho, nos_explorados, log  # Retorna também o log
@@ -126,6 +128,8 @@ def dfs(grafo, inicio, destino, visitados=None, nos_explorados=0, log=None):
     
     visitados.add(inicio)
     nos_explorados += 1  # Incrementa quando um nó é explorado
+
+    # Registrar o nó explorado no log
     log.append(f"Nó explorado: {inicio}")
 
     if inicio == destino:
@@ -135,6 +139,7 @@ def dfs(grafo, inicio, destino, visitados=None, nos_explorados=0, log=None):
         if vizinho not in visitados:
             caminho, nos_explorados, log = dfs(grafo, vizinho, destino, visitados, nos_explorados, log)
             if caminho:
+                log.append(f"Retornando pelo nó: {inicio} -> caminho atual: {caminho}")
                 return [inicio] + caminho, nos_explorados, log
 
     return None, nos_explorados, log
