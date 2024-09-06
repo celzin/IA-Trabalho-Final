@@ -14,26 +14,6 @@ def heuristica_manhattan(cidade_atual, destino, coordenadas):
     x2, y2 = coordenadas[destino]
     return abs(x2 - x1) + abs(y2 - y1)
 
-# def heuristica_mais_proxima(cidade_atual, cidades_nao_visitadas, grafo):
-#     menor_distancia = float('inf')
-#     for cidade in cidades_nao_visitadas:
-#         distancia = grafo[cidade_atual].get(cidade, float('inf'))
-#         if distancia < menor_distancia:
-#             menor_distancia = distancia
-#     return menor_distancia
-
-def heuristica_literatura(cidade_atual, destino, coordenadas):
-    # Calcula a distância Euclidiana (semelhante à Euclidiana tradicional)
-    x1, y1 = coordenadas[cidade_atual]
-    x2, y2 = coordenadas[destino]
-    distancia_euclidiana = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-    # Ajuste leve para simular comportamento esperado da literatura
-    fator_ajuste = 1.1  # Fator que aumenta levemente a estimativa para evitar caminhos desnecessários
-    
-    # Retornar a heurística ajustada
-    return distancia_euclidiana * fator_ajuste
-
 # A* Algorithm
 def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
     fila_prioridade = []
