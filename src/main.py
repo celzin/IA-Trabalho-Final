@@ -3,10 +3,8 @@ from algoritmos import *
 from visualizacao import visualizar_grafo
 
 def main():
-    # Criar o grafo da Romênia
     grafo = criar_grafo_romenia()
 
-    # Coordenadas aproximadas das cidades (para uso nas heurísticas)
     coordenadas = {
         'Arad': (46.18, 21.32),
         'Zerind': (46.62, 21.51),

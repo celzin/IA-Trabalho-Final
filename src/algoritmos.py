@@ -2,8 +2,6 @@ import heapq
 import math
 from collections import deque
 
-# Heurísticas
-
 def heuristica_euclidiana(cidade_atual, destino, coordenadas):
     x1, y1 = coordenadas[cidade_atual]
     x2, y2 = coordenadas[destino]
@@ -14,7 +12,6 @@ def heuristica_manhattan(cidade_atual, destino, coordenadas):
     x2, y2 = coordenadas[destino]
     return abs(x2 - x1) + abs(y2 - y1)
 
-# A* Algorithm
 def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
     fila_prioridade = []
     heapq.heappush(fila_prioridade, (0, inicio))
@@ -41,7 +38,6 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
                 
     return None, float('inf')
 
-# BFS Algorithm
 def bfs(grafo, inicio, destino):
     fila = deque([[inicio]])
     visitados = set()
@@ -62,7 +58,6 @@ def bfs(grafo, inicio, destino):
 
     return None
 
-# DFS Algorithm
 def dfs(grafo, inicio, destino, visitados=None):
     if visitados is None:
         visitados = set()
