@@ -2,6 +2,7 @@ import heapq
 import math
 from collections import deque
 import time
+from visualizacao import visualizar_grafo_dinamico
 
 def medir_tempo_execucao(funcao, *args):
     inicio = time.perf_counter() 
@@ -49,22 +50,69 @@ def heuristica_manhattan(cidade_atual, destino, coordenadas):
     x2, y2 = coordenadas[destino]
     return abs(x2 - x1) + abs(y2 - y1)
 
-def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
+# def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
+#     fila_prioridade = []
+#     heapq.heappush(fila_prioridade, (0, inicio))
+#     custos = {inicio: 0}
+#     caminhos = {inicio: None}
+#     nos_explorados = 0  # Contador de nós explorados
+    
+#     if log is None:
+#         log = []  # Inicializa o log caso não seja passado
+    
+#     while fila_prioridade:
+#         custo_atual, no_atual = heapq.heappop(fila_prioridade)
+#         nos_explorados += 1  # Incrementa quando um nó é explorado
+
+#         # Registrar a expansão do nó no log
+#         log.append(f"Expansão do nó {no_atual}: f(g+h) = {custo_atual:.2f}")
+
+#         if no_atual == destino:
+#             caminho = []
+#             while no_atual:
+#                 caminho.append(no_atual)
+#                 no_atual = caminhos[no_atual]
+#             return caminho[::-1], custo_atual, nos_explorados, log  # Retorna também o log
+
+#         # Registrar os vizinhos e calcular os valores de f = g + h para cada um
+#         log.append(f"  Vizinhos de {no_atual}:")
+#         for vizinho, distancia in grafo[no_atual].items():
+#             novo_custo = custos[no_atual] + distancia
+#             heuristica_valor = heuristica(vizinho, destino, coordenadas)
+#             f_valor = novo_custo + heuristica_valor
+
+#             if vizinho not in custos or novo_custo < custos[vizinho]:
+#                 custos[vizinho] = novo_custo
+#                 prioridade = novo_custo + heuristica(vizinho, destino, coordenadas)
+#                 heapq.heappush(fila_prioridade, (prioridade, vizinho))
+#                 caminhos[vizinho] = no_atual
+
+#             # Registrar o cálculo de f(g+h) para o vizinho
+#             log.append(f"    - {vizinho}: g = {novo_custo:.2f}, h = {heuristica_valor:.2f}, f = {f_valor:.2f}")
+                
+#     return None, float('inf'), nos_explorados, log
+
+def a_estrela_dinamico(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
     fila_prioridade = []
     heapq.heappush(fila_prioridade, (0, inicio))
     custos = {inicio: 0}
     caminhos = {inicio: None}
     nos_explorados = 0  # Contador de nós explorados
-    
+    explorados = []  # Lista de nós explorados para a visualização
+
     if log is None:
         log = []  # Inicializa o log caso não seja passado
     
     while fila_prioridade:
         custo_atual, no_atual = heapq.heappop(fila_prioridade)
         nos_explorados += 1  # Incrementa quando um nó é explorado
+        explorados.append(no_atual)  # Adiciona o nó à lista de explorados
 
         # Registrar a expansão do nó no log
         log.append(f"Expansão do nó {no_atual}: f(g+h) = {custo_atual:.2f}")
+
+        # Atualizar a visualização após cada nó explorado
+        visualizar_grafo_dinamico(grafo, explorados=explorados)
 
         if no_atual == destino:
             caminho = []
@@ -73,7 +121,7 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None, log=None):
                 no_atual = caminhos[no_atual]
             return caminho[::-1], custo_atual, nos_explorados, log  # Retorna também o log
 
-        # Registrar os vizinhos e calcular os valores de f = g + h para cada um
+        # Explorar os vizinhos
         log.append(f"  Vizinhos de {no_atual}:")
         for vizinho, distancia in grafo[no_atual].items():
             novo_custo = custos[no_atual] + distancia
