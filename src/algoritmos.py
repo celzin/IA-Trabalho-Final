@@ -1,8 +1,15 @@
 import heapq
 import math
 from collections import deque
+import time
 
-# Tabela de distâncias em linha reta para Bucareste (hDLR)
+def medir_tempo_execucao(funcao, *args):
+    inicio = time.perf_counter() 
+    resultado = funcao(*args)
+    fim = time.perf_counter()
+    tempo_decorrido = (fim - inicio) * 1000  
+    return resultado, tempo_decorrido
+
 hDLR = {
     'Arad': 366, 'Zerind': 374, 'Oradea': 380, 'Timisoara': 329, 'Sibiu': 253,
     'Fagaras': 176, 'Rimnicu Vilcea': 193, 'Pitesti': 100, 'Bucharest': 0,
@@ -29,7 +36,6 @@ coordenadas = {
         'Neamt': (46.98, 26.38)
     }
 
-# Heurística baseada em hDLR
 def heuristica_hDLR(cidade_atual, destino, _=None):
     return hDLR.get(cidade_atual, float('inf'))
 
@@ -48,16 +54,18 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
     heapq.heappush(fila_prioridade, (0, inicio))
     custos = {inicio: 0}
     caminhos = {inicio: None}
+    nos_explorados = 0  # Contador de nós explorados
     
     while fila_prioridade:
         custo_atual, no_atual = heapq.heappop(fila_prioridade)
+        nos_explorados += 1  # Incrementa quando um nó é explorado
 
         if no_atual == destino:
             caminho = []
             while no_atual:
                 caminho.append(no_atual)
                 no_atual = caminhos[no_atual]
-            return caminho[::-1], custo_atual
+            return caminho[::-1], custo_atual, nos_explorados  # Retorna também o número de nós
 
         for vizinho, distancia in grafo[no_atual].items():
             novo_custo = custos[no_atual] + distancia
@@ -67,18 +75,20 @@ def a_estrela(grafo, inicio, destino, heuristica, coordenadas=None):
                 heapq.heappush(fila_prioridade, (prioridade, vizinho))
                 caminhos[vizinho] = no_atual
                 
-    return None, float('inf')
+    return None, float('inf'), nos_explorados
 
 def bfs(grafo, inicio, destino):
     fila = deque([[inicio]])
     visitados = set()
+    nos_explorados = 0  # Contador de nós explorados
 
     while fila:
         caminho = fila.popleft()
         no_atual = caminho[-1]
+        nos_explorados += 1  # Incrementa quando um nó é explorado
 
         if no_atual == destino:
-            return caminho
+            return caminho, nos_explorados  # Retorna o número de nós
 
         if no_atual not in visitados:
             visitados.add(no_atual)
@@ -87,21 +97,22 @@ def bfs(grafo, inicio, destino):
                 novo_caminho.append(vizinho)
                 fila.append(novo_caminho)
 
-    return None
+    return None, nos_explorados
 
-def dfs(grafo, inicio, destino, visitados=None):
+def dfs(grafo, inicio, destino, visitados=None, nos_explorados=0):
     if visitados is None:
         visitados = set()
 
     visitados.add(inicio)
+    nos_explorados += 1  # Incrementa quando um nó é explorado
 
     if inicio == destino:
-        return [inicio]
+        return [inicio], nos_explorados  # Retorna o número de nós
 
     for vizinho in grafo[inicio]:
         if vizinho not in visitados:
-            caminho = dfs(grafo, vizinho, destino, visitados)
+            caminho, nos_explorados = dfs(grafo, vizinho, destino, visitados, nos_explorados)
             if caminho:
-                return [inicio] + caminho
+                return [inicio] + caminho, nos_explorados
 
-    return None
+    return None, nos_explorados
